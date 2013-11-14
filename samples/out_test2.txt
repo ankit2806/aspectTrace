@@ -1,0 +1,141 @@
+Process id : 29489
+Memory Design: NUMA
+Virtual Memory Info:
+Start Code:0x8048000
+End Code:0x804c0c8
+Code size:16584
+
+
+Start Data:0x804defc
+End Data:0x804e05c
+Data size:352
+
+
+Start Heap:0x9f34000
+End Heap:0x9f55000
+Heap size:135168
+
+
+Start Stack:0xbf8b46e0
+Total virtual memory allocated:2977792
+Enter rows of 1st matrix3
+Enter columns of 1st matrix3
+Enter rows of 2nd matrix3
+Enter columns of 2nd matrix3
+enter 1st matrix 
+
+Entered function: insert()
+Total virtual memory allocated:2985984
+
+Enter [0][0] element-- 1
+
+Enter [0][1] element-- 2
+
+Enter [0][2] element-- 3
+
+Enter [1][0] element-- 4
+
+Enter [1][1] element-- 5
+
+Enter [1][2] element-- 6
+
+Enter [2][0] element-- 7
+
+Enter [2][1] element-- 8
+
+Enter [2][2] element-- 9
+ matrix is
+
+Entered function: display()
+Total virtual memory allocated:2985984
+
+1	4	7	
+2	5	8	
+3	6	9	
+Exits function: display()
+Total virtual memory allocated:2985984
+Execution time of display() : 0.000094
+Execution time of display() with aspects : 0.000247
+Exits function: insert()
+Total virtual memory allocated:2985984
+Execution time of insert() : 2.863949
+Execution time of insert() with aspects : 2.864102
+enter 2st matrix 
+
+Entered function: insert()
+Total virtual memory allocated:2985984
+
+Enter [0][0] element-- 9
+
+Enter [0][1] element-- 8
+
+Enter [0][2] element-- 7
+
+Enter [1][0] element-- 6
+
+Enter [1][1] element-- 5
+
+Enter [1][2] element-- 4
+
+Enter [2][0] element-- 3
+
+Enter [2][1] element-- 2
+
+Enter [2][2] element-- 1
+ matrix is
+
+Entered function: display()
+Total virtual memory allocated:2985984
+
+9	6	3	
+8	5	2	
+7	4	1	
+Exits function: display()
+Total virtual memory allocated:3145728
+Execution time of display() : 0.000082
+Execution time of display() with aspects : 0.000260
+Exits function: insert()
+Total virtual memory allocated:3145728
+Execution time of insert() : 3.815967
+Execution time of insert() with aspects : 3.816145
+
+Entered function: prod()
+Total virtual memory allocated:3145728
+Exits function: prod()
+Total virtual memory allocated:3145728
+Execution time of prod() : 0.000001
+Execution time of prod() with aspects : 0.000001
+
+Entered function: display()
+Total virtual memory allocated:3145728
+
+68	41	14	
+92	56	20	
+116	71	26	
+Exits function: display()
+Total virtual memory allocated:3145728
+Execution time of display() : 0.000049
+Execution time of display() with aspects : 0.000347
+Exited Function : main()
+
+Return value :0
+
+Execution time of main() : 11.560178
+Execution time with aspects : 11.561848
+Aspects Overhead : 0.001670
+Percentage Overhead : 0.014441%
+
+Heap allocated for program : 480216 bytes
+Memory Leaks : 72 bytes
+Location of memory leaks : 
+0x9f340a8 72 30 
+
+
+Function Analysis:
+display		0.000094	0.000813%
+insert		2.863949	24.774263%
+display		0.000082	0.000709%
+insert		3.815967	33.009586%
+prod		0.000001	0.000009%
+display		0.000049	0.000424%
+

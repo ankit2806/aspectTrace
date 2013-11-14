@@ -1,0 +1,165 @@
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/time.h>
+
+aspect memory
+{
+	typedef unsigned long long uint64_t;
+	FILE *fp,*fp2;
+	double tick1[100],tick2[100],t1,t2,t3,t1_asp,t2_asp[100];
+	uint64_t heap_size, mem_leak;
+	int cnt,i;
+	timeval tim;
+
+	advice execution("% main(...)") : before()
+	{  
+		gettimeofday(&tim,NULL);
+		tick1[0] = tim.tv_sec+(tim.tv_usec/1000000.0);
+		t1_asp = tick1[0];
+		fp = fopen("/proc/main","a+");
+		fprintf(fp,"%d",getpid());
+		fclose(fp);
+		
+		heap_size = 0;
+		mem_leak = 0;
+		cnt = 0;
+		gettimeofday(&tim,NULL);
+		tick1[0] = tick1[0] + (tim.tv_sec+(tim.tv_usec/1000000.0) - tick1[0]);
+	}
+	
+        advice call("% malloc(...)") && args(a): around (unsigned int a)
+	{ 
+		gettimeofday(&tim,NULL);
+		t1 = tim.tv_sec+(tim.tv_usec/1000000.0);
+		heap_size = heap_size + a;
+		mem_leak = mem_leak + a;
+		gettimeofday(&tim,NULL);
+		t1 = tim.tv_sec+(tim.tv_usec/1000000.0) - t1;
+		
+		tjp->proceed();
+		
+		gettimeofday(&tim,NULL);
+		t2 = tim.tv_sec+(tim.tv_usec/1000000.0);
+		fp = fopen(".tmp_mem","a+");
+		fprintf(fp,"%d ",a);
+		fprintf(fp,"0 %d \n",JoinPoint::line());
+		fclose(fp);
+		gettimeofday(&tim,NULL);
+		t3 = tim.tv_sec+(tim.tv_usec/1000000.0);
+		for(i=cnt;i>=0;i--)
+			tick1[i] = tick1[i] + (t3 - t2 + t1);
+	}
+	
+	advice call("% malloc(...)") && result(a): after (void *a)
+	{ 
+		fp = fopen(".tmp_mem","a+");
+		fprintf(fp,"%p ",a);
+		fclose(fp);
+	}
+
+	advice call("% free(...)") && args(a): around (void* a)
+	{ 
+		gettimeofday(&tim,NULL);
+		t1 = tim.tv_sec+(tim.tv_usec/1000000.0);
+		char a_addr[11], size[11],flag[1];
+		fp = fopen(".tmp_free","w+");
+		fprintf(fp,"%p",a);
+		fseek(fp,0,SEEK_SET);
+		fscanf(fp,"%s",a_addr);
+		fclose(fp);
+		
+		fp = fopen(".tmp_mem","r+");
+		while(!feof(fp))
+		{
+			char addr[11];
+			fscanf(fp,"%s",addr);
+			if(strcmp(addr,a_addr)==0)
+			{
+				
+				fscanf(fp,"%s",size);
+				fscanf(fp,"%s",flag);
+				if(flag[0]=='0')
+				{	
+					mem_leak = mem_leak-atoi(size);
+					fseek(fp,-2,SEEK_CUR);
+					fprintf(fp," %s", "1");
+				}
+				
+				fscanf(fp,"%s",addr);
+				bzero(addr,11);
+				bzero(size,11);
+				bzero(flag,1);
+			}
+		}
+		fclose(fp);
+		gettimeofday(&tim,NULL);
+		
+		t3 = tim.tv_sec+(tim.tv_usec/1000000.0);
+		for(i=cnt;i>=0;i--)
+			tick1[i] = tick1[i] + (t3 - t1);//printf("t1_f_e===%lf    %lf\n",t1,tim.tv_sec+(tim.tv_usec/1000000.0));
+		
+		tjp->proceed();
+	}
+	
+	
+	advice execution("% main(...)") && result(a) : after(int a)
+	{
+		gettimeofday(&tim,NULL);
+		tick2[0] = tim.tv_sec+(tim.tv_usec/1000000.0);
+		printf("Exited Function : main()\n\n");
+		printf("Return value :%d\n\n",a);
+		printf("Execution time of main() : %lf\n",tick2[0]-tick1[0]);
+		printf("Execution time with aspects : %lf\n",tick2[0]-t1_asp);
+		printf("Aspects Overhead : %lf\n",tick1[0]-t1_asp);
+		printf("Percentage Overhead : %lf%\n\n",(tick1[0]-t1_asp)/(tick2[0]-t1_asp)*100);
+		printf("Heap allocated for program : %lld bytes\n",heap_size);
+		printf("Memory Leaks : %lld bytes\n",mem_leak);
+		
+		
+		fp = fopen(".tmp_mem","r+");
+		if(mem_leak!=0)
+		{
+			char addr[15],size[10],is_freed[2],line_no[10];
+			printf("Location of memory leaks : \n");
+				
+			while(!feof(fp))
+			{
+				fscanf(fp,"%s",addr);
+				fscanf(fp,"%s",size);
+				fscanf(fp,"%s",is_freed);
+				fscanf(fp,"%s",line_no);
+
+				if(is_freed[0]=='0')
+				{
+					printf("%s %s %s \n", addr, size, line_no);	
+				}
+
+				bzero(addr,15);
+				bzero(size,10);
+				bzero(line_no,10);
+				bzero(is_freed,2);
+			}
+		}
+			printf("\n\n");
+				
+		fclose(fp);
+		
+		fp = fopen("func_analysis.txt","r+");
+		char str[25];
+		double b;
+		
+		printf("Function Analysis:\n");
+		while(!feof(fp))
+		{
+			fscanf(fp,"%s%lf",str,&b);
+			printf("%s\t\t%lf\t%lf%\n",str,b,b/(tick2[0]-tick1[0])*100);
+		}
+		
+		fclose(fp);
+		printf("\n\n");
+	}
+	
+	

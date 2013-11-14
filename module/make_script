@@ -1,0 +1,15 @@
+#!/bin/sh
+
+cd module
+
+rmmod prof
+
+make clean
+
+clear
+clear
+clear
+
+make
+
+cd ..

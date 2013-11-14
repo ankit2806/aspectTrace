@@ -1,0 +1,76 @@
+Process id : 28857
+Memory Design: NUMA
+Virtual Memory Info:
+Start Code:0x8048000
+End Code:0x804a668
+Code size:9832
+
+
+Start Data:0x804befc
+End Data:0x804c054
+Data size:344
+
+
+Start Heap:0x9860000
+End Heap:0x9881000
+Heap size:135168
+
+
+Start Stack:0xbff39f10
+Total virtual memory allocated:2969600
+
+Entered function: run()
+Total virtual memory allocated:2973696
+Exits function: run()
+Total virtual memory allocated:2973696
+Execution time of run() : 0.000000
+Execution time of run() with aspects : 0.000000
+
+Entered function: stop()
+Total virtual memory allocated:2973696
+Exits function: stop()
+Total virtual memory allocated:2973696
+Execution time of stop() : 0.000000
+Execution time of stop() with aspects : 0.000000
+
+Entered function: run()
+Total virtual memory allocated:2973696
+Exits function: run()
+Total virtual memory allocated:2973696
+Execution time of run() : 0.000000
+Execution time of run() with aspects : 0.000000
+
+Entered function: run()
+Total virtual memory allocated:2973696
+Exits function: run()
+Total virtual memory allocated:2973696
+Execution time of run() : 0.000000
+Execution time of run() with aspects : 0.000000
+
+Entered function: stop()
+Total virtual memory allocated:2973696
+Exits function: stop()
+Total virtual memory allocated:2973696
+Execution time of stop() : 0.000000
+Execution time of stop() with aspects : 0.000000
+Exited Function : main()
+
+Return value :0
+
+Execution time of main() : 0.000311
+Execution time with aspects : 0.000510
+Aspects Overhead : 0.000199
+Percentage Overhead : 38.990182%
+
+Heap allocated for program : 15 bytes
+Memory Leaks : 10 bytes
+Location of memory leaks : 
+0x9860008 10 12 
+
+
+Function Analysis:
+run		0.000000	0.000000%
+stop		0.000000	0.000000%
+run		0.000000	0.000000%
+run		0.000000	0.000000%
+stop		0.000000	0.000000%

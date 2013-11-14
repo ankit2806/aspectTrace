@@ -1,0 +1,7 @@
+To execute the profiler, use the following sample files:
+1. test1.c test1_1.c
+2. test2.c
+
+To execute, use the following commands:
+1. bash aTrace.sh samples/test1.c samples/test1_1.c
+2. bash aTrace.sh samples/test2.c
